@@ -1,4 +1,9 @@
 {
+    "autoload": {
+        "psr-4": {
+            "Logto\\WpPlugin\\": "src/"
+        }
+    },
     "require": {
         "logto/sdk": "^0.2.1"
     }

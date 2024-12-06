@@ -11,9 +11,9 @@
  * Text Domain: logto
  */
 
-function logto_login_form(): void
-{
-  echo '<p>Hi from Logto</p>';
-}
+require_once __DIR__ . '/vendor/autoload.php';
 
-add_action('login_form', 'logto_login_form');
+use Logto\WpPlugin\LogtoPlugin;
+
+$plugin = new LogtoPlugin();
+$plugin->register();
