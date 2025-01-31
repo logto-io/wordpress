@@ -67,7 +67,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
 
   public function renderMenu(): void
   {
-    include LogtoConstants::PLUGIN_DIR . 'pages/MenuSettings.php';
+    include LogtoConstants::PLUGIN_DIR . 'pages/Settings.php';
   }
 
   public function initSettings(): void
@@ -99,6 +99,8 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
         }
 </style>';
     });
+
+    add_action('admin_notices', [$this, 'renderSettingsErrors']);
 
     error_log('Init settings');
     error_log(print_r($this->settings, true));
@@ -141,7 +143,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     $authenticationSettings->addInputField(
       'scope',
       'Scope',
-      'The scopes to use for the authentication request. Separate multiple scopes with a space.',
+      'The scopes to use for the authentication request. Separate multiple scopes by spaces.',
       $this->settings->scope
     );
     $authenticationSettings->addInputField(
@@ -229,10 +231,29 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     );
   }
 
-  public function validateSettings(array $input): array
+  public function validateSettings(array $input): array|false
   {
     error_log('Validating settings');
     error_log(print_r($input, true));
+
+    $oldValue = get_option(LogtoConstants::OPTION_NAME, []);
+
+    // Check if mandatory fields are filled
+    $mandatoryFields = ['endpoint', 'appId', 'appSecret'];
+    foreach ($mandatoryFields as $field) {
+      if (empty($input[$field])) {
+        add_settings_error(
+          LogtoConstants::OPTION_NAME,
+          'logto_settings_invalid',
+          "Field '$field' is required.",
+          'error'
+        );
+      }
+    }
+
+    if (get_settings_errors(LogtoConstants::OPTION_NAME)) {
+      return $oldValue;
+    }
 
     // Convert checkbox values to boolean. We need to iterate over all settings because $input will
     // only contain values that are checked ('on') and unchecked values will be missing.
@@ -243,6 +264,13 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     }
 
     $input['roleMapping'] = $this->handleKeyValuePairsSettings('roleMapping', $input);
+
+    add_settings_error(
+      LogtoConstants::OPTION_NAME,
+      'logto_settings_updated',
+      'Settings updated.',
+      'updated'
+    );
 
     return $input;
   }
@@ -260,5 +288,10 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       $keys,
       $values
     );
+  }
+
+  public function renderSettingsErrors()
+  {
+    settings_errors(LogtoConstants::OPTION_NAME);
   }
 }
