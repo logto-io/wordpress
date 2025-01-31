@@ -147,7 +147,7 @@ class SettingsSection
       echo "</div>";
     }
     echo "</div>";
-    echo "<button id='add-$id' type='button' class='button'>Add</button>";
+    echo "<button id='add-$id' type='button' class='button'>" . __('Add', 'logto') . "</button>";
     echo "<p class='description'>$description</p>";
 
     ?>
@@ -176,6 +176,6 @@ class SettingsSection
   {
     echo "<input type='text' name='{$this->optionName}[$id][keys][]' value='$key' style='width: 150px;' placeholder='" . ($options['keyPlaceholder'] ?? 'Key') . "' />";
     echo "<input type='text' name='{$this->optionName}[$id][values][]' value='$val' style='width: 150px;' placeholder='" . ($options['valuePlaceholder'] ?? 'Value') . "' />";
-    echo "<button type='button' class='button'>Delete</button>";
+    echo "<button type='button' class='button'>" . __('Remove', 'logto') . "</button>";
   }
 }

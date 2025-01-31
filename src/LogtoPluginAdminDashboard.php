@@ -23,11 +23,11 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
   {
     $capability = 'manage_options';
     $slug = LogtoConstants::MENU_SLUG;
-    $settings_page_title = 'Logto Settings';
-    $settings_menu_title = 'Settings';
+    $settings_page_title = __('Logto Settings', 'logto');
+    $settings_menu_title = __('Settings', 'logto');
     $settings_callback = [$this, 'renderMenu'];
-    $help_page_title = 'Logto Help';
-    $help_menu_title = 'Help';
+    $help_page_title = __('Logto Help', 'logto');
+    $help_menu_title = __('Help', 'logto');
     $help_callback = [$this, 'renderMenu'];
 
     add_menu_page(
@@ -109,26 +109,26 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       LogtoConstants::MENU_SLUG,
       LogtoConstants::OPTION_NAME,
       'logto_basic_settings',
-      'Basic settings',
-      'Settings required to connect to Logto. You can find these settings in the Logto Console application details page.',
+      __('Basic settings', 'logto'),
+      _x('Settings required to connect to Logto. You can find these settings in the Logto Console application details page.', 'Basic settings description', 'logto'),
     );
     $basicSettings->render();
     $basicSettings->addInputField(
       'endpoint',
-      'Logto endpoint',
-      'The endpoint of your Logto instance. If you are using a custom domain, enter the custom domain here.',
+      getSettingsTitle('endpoint'),
+      _x('The endpoint of your Logto instance. If you are using a custom domain, enter the custom domain here.', 'Logto endpoint description', 'logto'),
       $this->settings->endpoint
     );
     $basicSettings->addInputField(
       'appId',
-      'App ID',
-      'The app ID that shows up in the Logto Console application details page.',
+      getSettingsTitle('appId'),
+      _x('The app ID that shows up in the Logto Console application details page.', 'App ID description', 'logto'),
       $this->settings->appId
     );
     $basicSettings->addInputField(
       'appSecret',
-      'App secret',
-      'One of the app secrets that shows up in the Logto Console application details page.',
+      getSettingsTitle('appSecret'),
+      _x('One of the app secrets that shows up in the Logto Console application details page.', 'App secret description', 'logto'),
       $this->settings->appSecret
     );
 
@@ -136,33 +136,33 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       LogtoConstants::MENU_SLUG,
       LogtoConstants::OPTION_NAME,
       'logto_authentication_settings',
-      'Authentication settings',
-      'Settings related to user authentication. These settings may affect the user experience.',
+      __('Authentication settings'),
+      _x('Settings related to user authentication. These settings may affect the user experience.', 'Authentication settings description', 'logto'),
     );
     $authenticationSettings->render();
     $authenticationSettings->addInputField(
       'scope',
-      'Scope',
-      'The scopes to use for the authentication request. Separate multiple scopes by spaces.',
+      getSettingsTitle('scope'),
+      _x('The scopes to use for the authentication request. Separate multiple scopes by spaces.', 'Scope description', 'logto'),
       $this->settings->scope
     );
     $authenticationSettings->addInputField(
       'extraParams',
-      'Extra params',
-      'Extra authentication parameters to include in the authentication request. Use the URL query string format, e.g., <code>param1=value1&amp;param2=value2</code>.',
+      getSettingsTitle('extraParams'),
+      _x('Extra authentication parameters to include in the authentication request. Use the URL query string format, e.g., <code>param1=value1&amp;param2=value2</code>.', 'Extra params description', 'logto'),
       $this->settings->extraParams
     );
     $authenticationSettings->addSwitchField(
       'requireVerifiedEmail',
-      'Require verified email',
-      'Require user email to be verified before logging in',
-      'Whether to require user email to be verified at Logto. If enabled, users with unverified emails will not be able to log in.',
+      getSettingsTitle('requireVerifiedEmail'),
+      _x('Require user email to be verified before logging in', 'Require verified email description', 'logto'),
+      _x('Whether to require user email to be verified at Logto. If enabled, users with unverified emails will not be able to log in.', 'Require verified email explanation', 'logto'),
       $this->settings->requireVerifiedEmail
     );
     $authenticationSettings->addInputField(
       'requireOrganizationId',
-      'Require organization ID',
-      'When set, users must belong to the specified organization to log in.',
+      getSettingsTitle('requireOrganizationId'),
+      _x('When set, users must belong to the specified organization to log in.', 'Require organization ID description', 'logto'),
       $this->settings->requireOrganizationId
     );
 
@@ -170,19 +170,19 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       LogtoConstants::MENU_SLUG,
       LogtoConstants::OPTION_NAME,
       'logto_authorization_settings',
-      'Authorization settings',
-      'Settings related to user authorization. These settings may affect the user experience and access control.',
+      __('Authorization settings', 'logto'),
+      _x('Settings related to user authorization. These settings may affect the user experience and access control.', 'Authorization settings description', 'logto'),
     );
 
     $authorizationSettings->render();
     $authorizationSettings->addKeyValuePairsField(
       'roleMapping',
-      'Role mapping',
-      'Map Logto roles to WordPress roles with order of precedence.<br/>When a role is found in the mapping, the user will be assigned the corresponding WordPress role and the rest of the mapping will be ignored.',
+      getSettingsTitle('roleMapping'),
+      _x('Map Logto roles to WordPress roles with order of precedence.<br/>When a role is found in the mapping, the user will be assigned the corresponding WordPress role and the rest of the mapping will be ignored.', 'Role mapping description', 'logto'),
       $this->settings->roleMapping,
       [
-        'keyPlaceholder' => 'Logto role',
-        'valuePlaceholder' => 'WordPress role',
+        'keyPlaceholder' => __('Logto role', 'logto'),
+        'valuePlaceholder' => __('WordPress role', 'logto'),
       ]
     );
 
@@ -190,43 +190,43 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       LogtoConstants::MENU_SLUG,
       LogtoConstants::OPTION_NAME,
       'logto_advanced_settings',
-      'Advanced settings',
+      __('Advanced settings', 'logto'),
       null
     );
     $advancedSettings->render();
     $advancedSettings->addSwitchField(
       'rememberSession',
-      'Remember session',
-      'Remember user session for a longer period',
-      'By default, WordPress session expires after 2 days. Enable this setting to remember user session for a longer period (14 days).',
+      getSettingsTitle('rememberSession'),
+      _x('Remember user session for a longer period', 'Remember session description', 'logto'),
+      _x('By default, WordPress session expires after 2 days. Enable this setting to remember user session for a longer period (14 days).', 'Remember session explanation', 'logto'),
       $this->settings->rememberSession
     );
     $advancedSettings->addSwitchField(
       'syncProfile',
-      'Sync profile',
-      'Sync user profile at every login',
-      'When enabled, user profile will be synced from Logto at every login and existing WordPress profile will be overwritten.',
+      getSettingsTitle('syncProfile'),
+      _x('Sync user profile at every login', 'Sync profile description', 'logto'),
+      _x('When enabled, user profile will be synced from Logto at every login and existing WordPress profile will be overwritten.', 'Sync profile explanation', 'logto'),
       $this->settings->syncProfile
     );
     $advancedSettings->addRadioField(
       'wpFormLogin',
-      'WordPress form login',
-      'Choose how to handle WordPress form login. You can disable WordPress form login to secure your site with Logto, or allow users to log in with WordPress form by appending a query parameter to the login URL.',
+      getSettingsTitle('wpFormLogin'),
+      _x('Choose how to handle WordPress form login. You can disable WordPress form login to secure your site with Logto, or allow users to log in with WordPress form by appending a query parameter to the login URL.', 'WordPress form login description', 'logto'),
       $this->settings->wpFormLogin,
       [
-        WpFormLogin::disabled->value => 'Disabled',
-        WpFormLogin::query->value => 'Query (append <code>?form=1</code> to use WordPress form login)',
+        WpFormLogin::disabled->value => __('Disabled', 'logto'),
+        WpFormLogin::query->value => _x('Query (append <code>?form=1</code> to use WordPress form login)', 'WordPress form login query option', 'logto'),
       ]
     );
     $advancedSettings->addRadioField(
       'usernameStrategy',
-      'Username strategy',
-      'Choose how to determine the WordPress username when a user logs in with Logto.',
+      getSettingsTitle('usernameStrategy'),
+      _x('Choose how to determine the WordPress username when a user logs in with Logto.', 'Username strategy description', 'logto'),
       $this->settings->usernameStrategy,
       [
-        WpUsernameStrategy::smart->value => '<b>Smart:</b> Use Logto email if available, otherwise use Logto username',
-        WpUsernameStrategy::email->value => '<b>Email:</b> Use Logto email',
-        WpUsernameStrategy::username->value => '<b>Username:</b> Use Logto username',
+        WpUsernameStrategy::smart->value => _x('<b>Smart:</b> Use Logto email if available, otherwise use Logto username', 'Smart username strategy', 'logto'),
+        WpUsernameStrategy::email->value => _x('<b>Email:</b> Use Logto email', 'Email username strategy', 'logto'),
+        WpUsernameStrategy::username->value => _x('<b>Username:</b> Use Logto username', 'Username username strategy', 'logto'),
       ]
     );
   }
@@ -245,7 +245,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
         add_settings_error(
           LogtoConstants::OPTION_NAME,
           'logto_settings_invalid',
-          "Field '$field' is required.",
+          sprintf(__('Field "%s" is required.', 'logto'), getSettingsTitle($field)),
           'error'
         );
       }
@@ -268,7 +268,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     add_settings_error(
       LogtoConstants::OPTION_NAME,
       'logto_settings_updated',
-      'Settings updated.',
+      __('Settings updated.', 'logto'),
       'updated'
     );
 

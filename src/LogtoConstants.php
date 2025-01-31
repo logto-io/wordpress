@@ -17,3 +17,35 @@ class LogtoConstants
   const OPTION_NAME = self::OPTION_KEY;
   const OPTION_GROUP = 'logto_option_group';
 }
+
+function getSettingsTitle(string $id): string
+{
+  switch ($id) {
+    case 'endpoint':
+      return __('Logto endpoint', 'logto');
+    case 'appId':
+      return __('App ID', 'logto');
+    case 'appSecret':
+      return __('App secret', 'logto');
+    case 'scope':
+      return __('Scope', 'logto');
+    case 'extraParams':
+      return __('Extra params', 'logto');
+    case 'requireVerifiedEmail':
+      return __('Require verified email', 'logto');
+    case 'requireOrganizationId':
+      return __('Require organization ID', 'logto');
+    case 'roleMapping':
+      return __('Role mapping', 'logto');
+    case 'rememberSession':
+      return __('Remember session', 'logto');
+    case 'syncProfile':
+      return __('Sync profile', 'logto');
+    case 'wpFormLogin':
+      return __('WordPress form login', 'logto');
+    case 'usernameStrategy':
+      return __('Username strategy', 'logto');
+    default:
+      return $id;
+  }
+}
