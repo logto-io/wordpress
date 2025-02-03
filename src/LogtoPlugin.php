@@ -36,18 +36,18 @@ class LogtoPlugin
     add_action('wp_logout', [$this, 'handleLogout']);
     add_action('template_redirect', [$this, 'handleCallback']);
     add_action('user_profile_update_errors', [$this, 'handleProfileUpdateErrors'], 10, 3);
-    add_action('plugin_loaded', [$this, 'handlePluginLoaded']);
+    add_action('plugins_loaded', [$this, 'handlePluginsLoaded']);
     LogtoPluginAdminDashboard::getInstance()->register();
   }
 
-  function handlePluginLoaded(): void
+  function handlePluginsLoaded(): void
   {
     // We intentionally don't use a constant here since all translation functions (e.g. `__()`)
     // cannot be used with a constant as the text domain as the WP CLI command `i18n make-pot`
     // will not be able to extract the strings. We have to use string literals instead; and it
     // makes a constant useless.
     // Rules of thumb: Don't be too smart with the WordPress ecosystem.
-    load_plugin_textdomain('logto', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+    load_plugin_textdomain('logto', false, plugin_basename(LogtoConstants::PLUGIN_DIR . 'languages/'));
   }
 
   function handleLoginForm(): void
@@ -139,7 +139,7 @@ class LogtoPlugin
     return get_user_by('id', $userId);
   }
 
-  protected function handleProfileUpdateErrors($errors, $update, $user)
+  function handleProfileUpdateErrors($errors, $update, $user)
   {
     $pendingEmail = get_user_meta($user->ID, '_new_email', true);
 
