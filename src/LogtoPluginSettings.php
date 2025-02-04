@@ -47,4 +47,17 @@ class LogtoPluginSettings extends JsonModel
     public string $usernameStrategy = WpUsernameStrategy::smart->value,
   ) {
   }
+
+  /**
+   * Check if the settings are ready to use. Returns true if the following conditions are met:
+   * - Endpoint is not empty
+   * - App ID is not empty
+   * - App secret is not empty
+   */
+  function isReady(): bool
+  {
+    return !empty($this->endpoint)
+      && !empty($this->appId)
+      && !empty($this->appSecret);
+  }
 }
