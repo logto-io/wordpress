@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69f43157d39e101ad275ed7f86427a8d",
+    "content-hash": "0f77f3a5468a475964cabc045b5ef9ee",
     "packages": [
         {
             "name": "firebase/php-jwt",
-            "version": "v6.10.2",
+            "version": "v6.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "30c19ed0f3264cb660ea496895cfb6ef7ee3653b"
+                "reference": "8f718f4dfc9c5d5f0c994cdfd103921b43592712"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/30c19ed0f3264cb660ea496895cfb6ef7ee3653b",
-                "reference": "30c19ed0f3264cb660ea496895cfb6ef7ee3653b",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/8f718f4dfc9c5d5f0c994cdfd103921b43592712",
+                "reference": "8f718f4dfc9c5d5f0c994cdfd103921b43592712",
                 "shasum": ""
             },
             "require": {
@@ -65,9 +65,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.10.2"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.11.0"
             },
-            "time": "2024-11-24T11:22:49+00:00"
+            "time": "2025-01-23T05:11:06+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -458,16 +458,16 @@
         },
         {
             "name": "logto/sdk",
-            "version": "v0.2.1",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/logto-io/php.git",
-                "reference": "bfbfe7439608cea23150534178708dae868a8559"
+                "reference": "cdb25fb4df821126651d52575d3e3bf61b6f12b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/logto-io/php/zipball/bfbfe7439608cea23150534178708dae868a8559",
-                "reference": "bfbfe7439608cea23150534178708dae868a8559",
+                "url": "https://api.github.com/repos/logto-io/php/zipball/cdb25fb4df821126651d52575d3e3bf61b6f12b7",
+                "reference": "cdb25fb4df821126651d52575d3e3bf61b6f12b7",
                 "shasum": ""
             },
             "require": {
@@ -500,7 +500,7 @@
             "description": "Logto PHP SDK.",
             "support": {
                 "issues": "https://github.com/logto-io/php/issues",
-                "source": "https://github.com/logto-io/php/tree/v0.2.1"
+                "source": "https://github.com/logto-io/php/tree/v0.3.0"
             },
             "funding": [
                 {
@@ -508,7 +508,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-27T10:57:23+00:00"
+            "time": "2024-11-28T08:44:55+00:00"
         },
         {
             "name": "phpfastcache/phpfastcache",
@@ -1040,12 +1040,12 @@
             },
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
                 }
             },
             "autoload": {
@@ -1114,8 +1114,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -1193,8 +1193,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -1267,8 +1267,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -1415,10 +1415,10 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

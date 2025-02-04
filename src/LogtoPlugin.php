@@ -2,6 +2,7 @@
 namespace Logto\WpPlugin;
 
 use Logto\Sdk\LogtoClient;
+use Logto\Sdk\Constants\UserScope;
 
 class LogtoPlugin
 {
@@ -13,15 +14,22 @@ class LogtoPlugin
   protected function buildClient(): LogtoClient
   {
     $config = LogtoPluginSettings::get();
+    $scopes = explode(' ', $config->scope);
 
-    // TODO: check if config is ready
+    // Append organizations scope if "Require organization ID' is set
+    if ($config->requireOrganizationId) {
+      $scopes[] = UserScope::organizations->value;
+    }
+
+    // Normalize and deduplicate scopes
+    $scopes = array_unique(array_map('trim', $scopes));
 
     return new LogtoClient(
       new \Logto\Sdk\LogtoConfig(
         endpoint: $config->endpoint,
         appId: $config->appId,
         appSecret: $config->appSecret,
-        scopes: $config->scopes,
+        scopes: $scopes,
       ),
     );
   }
@@ -33,6 +41,7 @@ class LogtoPlugin
       add_rewrite_tag('%' . LogtoConstants::LOGIN_CALLBACK_TAG . '%', '([^&]+)');
     });
     add_action('login_form', [$this, 'handleLoginForm']);
+    add_action('lostpassword_form', [$this, 'handleLoginForm']);
     add_action('wp_logout', [$this, 'handleLogout']);
     add_action('template_redirect', [$this, 'handleCallback']);
     add_action('user_profile_update_errors', [$this, 'handleProfileUpdateErrors'], 10, 3);
@@ -52,7 +61,23 @@ class LogtoPlugin
 
   function handleLoginForm(): void
   {
-    wp_redirect($this->buildClient()->signIn(home_url('login-callback/')));
+    $config = LogtoPluginSettings::get();
+
+    if (!$config->isReady() || $this->shouldShowWordPressLoginForm()) {
+      return;
+    }
+
+    parse_str($config->extraParams, $extraParams);
+
+    // Overwrite first screen parameter if it's lost password form
+    if (isset($_GET['action']) && $_GET['action'] === 'lostpassword') {
+      $extraParams['first_screen'] = 'reset_password';
+    }
+
+    wp_redirect($this->buildClient()->signIn(
+      redirectUri: home_url('login-callback/'),
+      extraParams: $extraParams,
+    ));
     exit;
   }
 
@@ -71,12 +96,19 @@ class LogtoPlugin
       $client = $this->buildClient();
       $client->handleSignInCallback();
       $user = $this->upsertUser($client);
-      wp_set_auth_cookie($user->ID, true);
+      $config = LogtoPluginSettings::get();
+      wp_set_auth_cookie($user->ID, $config->rememberSession);
       wp_safe_redirect(home_url());
       return;
     }
 
     $this->handleCallbackError();
+  }
+
+  protected function shouldShowWordPressLoginForm(): bool
+  {
+    $config = LogtoPluginSettings::get();
+    return $config->wpFormLogin === WpFormLogin::query->value && isset($_GET['form']) && $_GET['form'] === '1';
   }
 
   protected function handleCallbackError(): void
@@ -95,17 +127,29 @@ class LogtoPlugin
 
   protected function upsertUser(LogtoClient $client): \WP_User
   {
+    $config = LogtoPluginSettings::get();
     $claims = $client->getIdTokenClaims();
 
     if (!$claims->email) {
       $this->handleError('Email not found', 'Logto user email is required.');
     }
 
-    if (!$claims->email_verified) {
+    if ($config->requireVerifiedEmail && !$claims->email_verified) {
       $this->handleError('Email not verified', 'Logto user email must be verified.');
     }
 
-    // Try to get user by Logto ID
+    if (
+      $config->requireOrganizationId &&
+      !in_array($config->requireOrganizationId, $claims->organizations ?? [], true)
+    ) {
+      $this->handleError('Organization not found', 'Logto user must be in the specified organization.');
+    }
+
+    // Try to get user by Logto ID. The result will be an array of user IDs.
+    //
+    // See https://developer.wordpress.org/reference/functions/get_users/#more-information
+    // - If ‘fields‘ is set to any individual wp_users table field, an array of IDs will be
+    // returned.
     $result = get_users([
       'meta_key' => LogtoConstants::USER_META_LOGTO_ID_KEY,
       'meta_value' => $claims->sub,
@@ -116,27 +160,60 @@ class LogtoPlugin
     if ($result[0]) {
       $userId = $result[0];
     } else {
+      // If not found, try to get an existing WordPress user by email.
       $user = get_user_by('email', $claims->email);
       $userId = $user ? $user->ID : null;
     }
 
-    $extraClaims = $claims->extra ?? [];
-    $userId = wp_insert_user([
-      'ID' => $userId,
-      'user_email' => $claims->email,
-      'user_login' => $claims->username ?? $claims->email,
-      'nickname' => ($extraClaims['nickname']) ?? $claims->name,
-      'display_name' => $claims->name,
-    ]);
+    // Upsert user if not found or sync profile is enabled
+    if (!$userId || $config->syncProfile) {
+      $extraClaims = $claims->extra ?? [];
 
-    if (is_wp_error($userId)) {
-      $this->handleError('Insert user failed', $user->get_error_message());
+      // Apply username (user_login) strategy
+      switch ($config->usernameStrategy) {
+        case WpUsernameStrategy::smart->value:
+          $userLogin = $claims->email ?? $claims->username;
+          break;
+        case WpUsernameStrategy::email->value:
+          $userLogin = $claims->email;
+          break;
+        case WpUsernameStrategy::username->value:
+          $userLogin = $claims->username;
+          break;
+      }
+
+      // If user ID is not found, it will create a new user.
+      // See https://developer.wordpress.org/reference/functions/wp_insert_user/#parameters
+      $userId = wp_insert_user([
+        'ID' => $userId,
+        'user_email' => $claims->email,
+        'user_login' => $userLogin,
+        'nickname' => ($extraClaims['nickname']) ?? $claims->name,
+        'display_name' => $claims->name,
+      ]);
+
+      if (is_wp_error($userId)) {
+        $this->handleError('Insert user failed', $user->get_error_message());
+      }
+
+      // Sync user data from Logto claims
+      update_user_meta($userId, LogtoConstants::USER_META_CLAIMS_KEY, $claims);
+      update_user_meta($userId, LogtoConstants::USER_META_LOGTO_ID_KEY, $claims->sub);
     }
 
-    update_user_meta($userId, LogtoConstants::USER_META_CLAIMS_KEY, $claims);
-    update_user_meta($userId, LogtoConstants::USER_META_LOGTO_ID_KEY, $claims->sub);
+    $user = get_user_by('id', $userId);
 
-    return get_user_by('id', $userId);
+    if ($user && $claims->roles) {
+      // Iterate role mapping and update user role if needed
+      foreach ($config->roleMapping as [$logtoRole, $wpRole]) {
+        if (in_array($logtoRole, $claims->roles, true)) {
+          $user->set_role($wpRole);
+          break;
+        }
+      }
+    }
+
+    return $user;
   }
 
   function handleProfileUpdateErrors($errors, $update, $user)
