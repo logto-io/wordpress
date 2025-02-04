@@ -60,4 +60,14 @@ class LogtoPluginSettings extends JsonModel
       && !empty($this->appId)
       && !empty($this->appSecret);
   }
+
+  function getRedirectUri(): string
+  {
+    return home_url(LogtoConstants::LOGIN_CALLBACK_PATH . '/');
+  }
+
+  function getPostSignOutRedirectUri(): string
+  {
+    return home_url();
+  }
 }

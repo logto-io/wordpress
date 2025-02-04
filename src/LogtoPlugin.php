@@ -37,7 +37,7 @@ class LogtoPlugin
   function register(): void
   {
     add_action('init', function () {
-      add_rewrite_rule('^login-callback/?$', 'index.php?' . LogtoConstants::LOGIN_CALLBACK_TAG . '=1', 'top');
+      add_rewrite_rule('^' . LogtoConstants::LOGIN_CALLBACK_PATH . '/?$', 'index.php?' . LogtoConstants::LOGIN_CALLBACK_TAG . '=1', 'top');
       add_rewrite_tag('%' . LogtoConstants::LOGIN_CALLBACK_TAG . '%', '([^&]+)');
     });
     add_action('login_form', [$this, 'handleLoginForm']);
@@ -75,7 +75,7 @@ class LogtoPlugin
     }
 
     wp_redirect($this->buildClient()->signIn(
-      redirectUri: home_url('login-callback/'),
+      redirectUri: $config->getRedirectUri(),
       extraParams: $extraParams,
     ));
     exit;
@@ -92,14 +92,22 @@ class LogtoPlugin
     if (!get_query_var(LogtoConstants::LOGIN_CALLBACK_TAG)) {
       return;
     }
+
     if (isset($_GET["code"])) {
-      $client = $this->buildClient();
-      $client->handleSignInCallback();
-      $user = $this->upsertUser($client);
-      $config = LogtoPluginSettings::get();
-      wp_set_auth_cookie($user->ID, $config->rememberSession);
-      wp_safe_redirect(home_url());
-      return;
+      try {
+        $client = $this->buildClient();
+        $client->handleSignInCallback();
+        $user = $this->upsertUser($client);
+        $config = LogtoPluginSettings::get();
+        wp_set_auth_cookie($user->ID, $config->rememberSession);
+        wp_safe_redirect(home_url());
+        return;
+      } catch (\Throwable $e) {
+        $this->handleError(
+          _x('Failed to login', 'Error title', 'logto'),
+          $e->getMessage()
+        );
+      }
     }
 
     $this->handleCallbackError();
@@ -113,16 +121,29 @@ class LogtoPlugin
 
   protected function handleCallbackError(): void
   {
-    $error = $_GET["error"];
-    $errorDescription = $_GET["error_description"];
+    $error = $_GET["error"] ?? _x('Unknown error', 'Error title when error is unknown', 'logto');
+    $errorDescription = $_GET["error_description"] ?? _x('Please try again later or contact the site administrator.', 'Default error description for login failure', 'logto');
 
-    $this->handleError($error, $errorDescription);
+    $this->handleError(
+      sprintf(
+        /* translators: %s is the actual error title. */
+        _x('Failed to login: %s', 'Error title', 'logto'),
+        $error
+      ),
+      $errorDescription
+    );
   }
 
   protected function handleError(string $title, string $content): void
   {
     $body = str_starts_with($content, '<') ? $content : "<p>$content</p>";
-    wp_die("<h1>$title</h1>$body");
+    wp_die(
+      "<h1>$title</h1><p>$body</p>" .
+      "<a href='" . wp_login_url() . "'>" . _x('Login again', 'logto') . '</a><br/>' .
+      "<a href='" . home_url() . "'>" . _x('Back to home', 'logto') . '</a>',
+      $title,
+      ['response' => 400]
+    );
   }
 
   protected function upsertUser(LogtoClient $client): \WP_User
@@ -131,18 +152,27 @@ class LogtoPlugin
     $claims = $client->getIdTokenClaims();
 
     if (!$claims->email) {
-      $this->handleError('Email not found', 'Logto user email is required.');
+      $this->handleError(
+        _x('Email not found', 'Error title', 'logto'),
+        _x('Email is required to complete login. Please contact the site administrator.', 'Error content for email not found', 'logto')
+      );
     }
 
     if ($config->requireVerifiedEmail && !$claims->email_verified) {
-      $this->handleError('Email not verified', 'Logto user email must be verified.');
+      $this->handleError(
+        _x('Email not verified', 'Error title', 'logto'),
+        _x('Email should be verified to complete login. Please contact the site administrator.', 'Error content for email not verified', 'logto')
+      );
     }
 
     if (
       $config->requireOrganizationId &&
       !in_array($config->requireOrganizationId, $claims->organizations ?? [], true)
     ) {
-      $this->handleError('Organization not found', 'Logto user must be in the specified organization.');
+      $this->handleError(
+        _x('Unauthorized', 'Error title', 'logto'),
+        _x('You must be in the specified organization to complete login. Please contact the site administrator.', 'logto')
+      );
     }
 
     // Try to get user by Logto ID. The result will be an array of user IDs.
@@ -193,7 +223,10 @@ class LogtoPlugin
       ]);
 
       if (is_wp_error($userId)) {
-        $this->handleError('Insert user failed', $user->get_error_message());
+        $this->handleError(
+          _x('Failed to create user', 'Error title', 'logto'),
+          $user->get_error_message()
+        );
       }
 
       // Sync user data from Logto claims

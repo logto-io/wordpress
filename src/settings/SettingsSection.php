@@ -29,6 +29,31 @@ class SettingsSection
     $this->rendered = true;
   }
 
+  public function addReadonlyField(
+    string $id,
+    string $title,
+    string $description,
+    ?string $value,
+  ): void {
+    if (!$this->rendered) {
+      throw new \Exception('Settings section must be rendered before adding input fields');
+    }
+
+    add_settings_field(
+      $id,
+      $title,
+      fn() => $this->renderReadonlyField($id, $description, $value ?? ''),
+      $this->page,
+      $this->id,
+    );
+  }
+
+  protected function renderReadonlyField(string $id, string $description, string $value): void
+  {
+    echo "<input type='text' id='$id' name='{$this->optionName}[$id]' value='$value' style='width: 300px;' readonly />";
+    echo "<p class='description'>$description</p>";
+  }
+
   public function addInputField(
     string $id,
     string $title,
@@ -139,10 +164,10 @@ class SettingsSection
 
   protected function renderKeyValuePairsField(string $id, string $description, array $value, array $options): void
   {
-    echo "<div id='edit-$id'>";
+    echo "<div id='edit-$id' style='display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;'>";
 
     foreach ($value as [$key, $val]) {
-      echo "<div>";
+      echo "<div style='display: flex; gap: 8px; align-items: center;'>";
       $this->renderKeyValuePair($id, $key, $val, $options);
       echo "</div>";
     }
