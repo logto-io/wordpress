@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Logto - User Authentication and Authorization 1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/logto-wp\n"
-"POT-Creation-Date: 2025-01-31T06:10:32+00:00\n"
-"PO-Revision-Date: 2025-02-02 19:12-0800\n"
+"POT-Creation-Date: 2025-02-04T19:48:18+00:00\n"
+"PO-Revision-Date: 2025-02-04 12:27-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -22,16 +22,10 @@ msgstr "Logto - Autenticación y autorización de usuarios"
 
 #. Description of the plugin
 #: logto.php
-msgid ""
-"Enable beautiful and secure user authentication, including passwordless, "
-"social login, single sign-on (SSO), multi-factor authentication (MFA). "
-"Generic OAuth2, OpenID Connect, SAML are also supported. Use role-based "
-"access control (RBAC) to manage user permissions."
+msgid "Enable beautiful and secure user authentication, including passwordless, social login, single sign-on (SSO), multi-factor authentication (MFA). Generic OAuth2, OpenID Connect, SAML are also supported. Use role-based access control (RBAC) to manage user permissions."
 msgstr ""
-"Habilita una autenticación de usuario segura y atractiva, incluyendo acceso sin contraseña, "
-"inicio de sesión social, inicio de sesión único (SSO) y autenticación multifactor (MFA). "
-"También se admiten OAuth2 genérico, OpenID Connect y SAML. Usa el control de acceso basado en roles (RBAC) "
-"para gestionar los permisos de los usuarios."
+"Habilita una autenticación de usuario segura y atractiva, incluyendo acceso sin contraseña, inicio de sesión social, inicio de sesión único (SSO) y autenticación multifactor (MFA). También se admiten OAuth2 genérico, OpenID Connect y SAML. Usa el control de acceso basado en roles (RBAC) para gestionar los permisos de "
+"los usuarios."
 
 #. Author of the plugin
 #: logto.php
@@ -43,53 +37,112 @@ msgstr "Logto"
 msgid "https://logto.io/"
 msgstr "https://logto.io/"
 
-#: src/LogtoConstants.php:25
+#: src/LogtoConstants.php:26
 msgid "Logto endpoint"
 msgstr "Punto de conexión de Logto"
 
-#: src/LogtoConstants.php:27
+#: src/LogtoConstants.php:28
 msgid "App ID"
 msgstr "ID de la aplicación"
 
-#: src/LogtoConstants.php:29
+#: src/LogtoConstants.php:30
 msgid "App secret"
 msgstr "Secreto de la aplicación"
 
-#: src/LogtoConstants.php:31
+#: src/LogtoConstants.php:32
+msgid "Redirect URI"
+msgstr "URI de redirección"
+
+#: src/LogtoConstants.php:34
+msgid "Post sign-out redirect URI"
+msgstr "URI de redirección después de cerrar sesión"
+
+#: src/LogtoConstants.php:36
 msgid "Scope"
 msgstr "Ámbito"
 
-#: src/LogtoConstants.php:33
+#: src/LogtoConstants.php:38
 msgid "Extra params"
 msgstr "Parámetros adicionales"
 
-#: src/LogtoConstants.php:35
+#: src/LogtoConstants.php:40
 msgid "Require verified email"
 msgstr "Requerir correo electrónico verificado"
 
-#: src/LogtoConstants.php:37
+#: src/LogtoConstants.php:42
 msgid "Require organization ID"
 msgstr "Requerir ID de organización"
 
-#: src/LogtoConstants.php:39
+#: src/LogtoConstants.php:44
 msgid "Role mapping"
 msgstr "Asignación de roles"
 
-#: src/LogtoConstants.php:41
+#: src/LogtoConstants.php:46
 msgid "Remember session"
 msgstr "Recordar sesión"
 
-#: src/LogtoConstants.php:43
+#: src/LogtoConstants.php:48
 msgid "Sync profile"
 msgstr "Sincronizar perfil"
 
-#: src/LogtoConstants.php:45
+#: src/LogtoConstants.php:50
 msgid "WordPress form login"
 msgstr "Inicio de sesión con formulario de WordPress"
 
-#: src/LogtoConstants.php:47
+#: src/LogtoConstants.php:52
 msgid "Username strategy"
 msgstr "Estrategia de nombre de usuario"
+
+#: src/LogtoPlugin.php:107
+msgctxt "Error title"
+msgid "Failed to login"
+msgstr "Error al iniciar sesión"
+
+#: src/LogtoPlugin.php:124
+msgctxt "Error title when error is unknown"
+msgid "Unknown error"
+msgstr "Error desconocido"
+
+#: src/LogtoPlugin.php:125
+msgctxt "Default error description for login failure"
+msgid "Please try again later or contact the site administrator."
+msgstr "Por favor, inténtalo de nuevo más tarde o contacta al administrador del sitio."
+
+#. translators: %s is the actual error title.
+#: src/LogtoPlugin.php:130
+msgctxt "Error title"
+msgid "Failed to login: %s"
+msgstr "Error al iniciar sesión: %s"
+
+#: src/LogtoPlugin.php:156
+msgctxt "Error title"
+msgid "Email not found"
+msgstr "Correo electrónico no encontrado"
+
+#: src/LogtoPlugin.php:157
+msgctxt "Error content for email not found"
+msgid "Email is required to complete login. Please contact the site administrator."
+msgstr "Se requiere correo electrónico para completar el inicio de sesión. Por favor, contacta al administrador del sitio."
+
+#: src/LogtoPlugin.php:163
+msgctxt "Error title"
+msgid "Email not verified"
+msgstr "Correo electrónico no verificado"
+
+#: src/LogtoPlugin.php:164
+msgctxt "Error content for email not verified"
+msgid "Email should be verified to complete login. Please contact the site administrator."
+msgstr "El correo electrónico debe estar verificado para completar el inicio de sesión. Por favor, contacta al administrador del sitio."
+
+#: src/LogtoPlugin.php:173
+msgctxt "Error title"
+msgid "Unauthorized"
+msgstr "No autorizado"
+
+#: src/LogtoPlugin.php:227
+msgctxt "Error title"
+msgid "Failed to create user"
+msgstr "Error al crear el usuario"
 
 #: src/LogtoPluginAdminDashboard.php:26
 msgid "Logto Settings"
@@ -113,204 +166,157 @@ msgstr "Configuración básica"
 
 #: src/LogtoPluginAdminDashboard.php:113
 msgctxt "Basic settings description"
-msgid ""
-"Settings required to connect to Logto. You can find these settings in the "
-"Logto Console application details page."
-msgstr ""
-"Configuración necesaria para conectarse a Logto. Puedes encontrar estos ajustes en la "
-"página de detalles de la aplicación en Logto Console."
+msgid "Settings required to connect to Logto. You can find these settings in the Logto Console application details page."
+msgstr "Configuración necesaria para conectarse a Logto. Puedes encontrar estos ajustes en la página de detalles de la aplicación en Logto Console."
 
 #: src/LogtoPluginAdminDashboard.php:119
 msgctxt "Logto endpoint description"
-msgid ""
-"The endpoint of your Logto instance. If you are using a custom domain, enter "
-"the custom domain here."
-msgstr ""
-"El punto de conexión de tu instancia de Logto. Si estás usando un dominio personalizado, "
-"ingrésalo aquí."
+msgid "The endpoint of your Logto instance. If you are using a custom domain, enter the custom domain here."
+msgstr "El punto de conexión de tu instancia de Logto. Si estás usando un dominio personalizado, ingrésalo aquí."
 
 #: src/LogtoPluginAdminDashboard.php:125
 msgctxt "App ID description"
 msgid "The app ID that shows up in the Logto Console application details page."
-msgstr ""
-"El ID de la aplicación que aparece en la página de detalles de la aplicación en Logto Console."
+msgstr "El ID de la aplicación que aparece en la página de detalles de la aplicación en Logto Console."
 
 #: src/LogtoPluginAdminDashboard.php:131
 msgctxt "App secret description"
-msgid ""
-"One of the app secrets that shows up in the Logto Console application "
-"details page."
-msgstr ""
-"Uno de los secretos de la aplicación que aparece en la página de detalles de la aplicación en Logto Console."
+msgid "One of the app secrets that shows up in the Logto Console application details page."
+msgstr "Uno de los secretos de la aplicación que aparece en la página de detalles de la aplicación en Logto Console."
 
-#: src/LogtoPluginAdminDashboard.php:140
-msgctxt "Authentication settings description"
-msgid ""
-"Settings related to user authentication. These settings may affect the user "
-"experience."
-msgstr ""
-"Configuración relacionada con la autenticación de usuarios. Estos ajustes pueden afectar "
-"la experiencia del usuario."
+#: src/LogtoPluginAdminDashboard.php:137
+msgctxt "Redirect URI description"
+msgid "The redirect URI you need to enter and save in the Logto Console application details page."
+msgstr "La URI de redirección que necesitas ingresar y guardar en la página de detalles de la aplicación en Logto Console."
 
-#: src/LogtoPluginAdminDashboard.php:146
-msgctxt "Scope description"
-msgid ""
-"The scopes to use for the authentication request. Separate multiple scopes "
-"by spaces."
-msgstr ""
-"Los ámbitos a utilizar en la solicitud de autenticación. Separa múltiples ámbitos con espacios."
+#: src/LogtoPluginAdminDashboard.php:143
+msgctxt "Post sign-out redirect URI description"
+msgid "The post sign-out redirect URI you need to enter and save in the Logto Console application details page."
+msgstr "La URI de redirección después de cerrar sesión que necesitas ingresar y guardar en la página de detalles de la aplicación en Logto Console."
 
 #: src/LogtoPluginAdminDashboard.php:152
-msgctxt "Extra params description"
-msgid ""
-"Extra authentication parameters to include in the authentication request. "
-"Use the URL query string format, e.g., <code>param1=value1&amp;"
-"param2=value2</code>."
-msgstr ""
-"Parámetros de autenticación adicionales para incluir en la solicitud de autenticación. "
-"Usa el formato de cadena de consulta de URL, por ejemplo, <code>param1=value1&amp;"
-"param2=value2</code>."
+msgctxt "Authentication settings description"
+msgid "Settings related to user authentication. These settings may affect the user experience."
+msgstr "Configuración relacionada con la autenticación de usuarios. Estos ajustes pueden afectar la experiencia del usuario."
 
 #: src/LogtoPluginAdminDashboard.php:158
+msgctxt "Scope description"
+msgid "The scopes to use for the authentication request. Separate multiple scopes by spaces."
+msgstr "Los ámbitos a utilizar en la solicitud de autenticación. Separa múltiples ámbitos con espacios."
+
+#: src/LogtoPluginAdminDashboard.php:164
+msgctxt "Extra params description"
+msgid "Extra authentication parameters to include in the authentication request. Use the URL query string format, e.g., <code>param1=value1&amp;param2=value2</code>."
+msgstr "Parámetros de autenticación adicionales para incluir en la solicitud de autenticación. Usa el formato de cadena de consulta de URL, por ejemplo, <code>param1=value1&amp;param2=value2</code>."
+
+#: src/LogtoPluginAdminDashboard.php:170
 msgctxt "Require verified email description"
 msgid "Require user email to be verified before logging in"
 msgstr "Requerir que el correo electrónico del usuario esté verificado antes de iniciar sesión"
 
-#: src/LogtoPluginAdminDashboard.php:159
+#: src/LogtoPluginAdminDashboard.php:171
 msgctxt "Require verified email explanation"
-msgid ""
-"Whether to require user email to be verified at Logto. If enabled, users "
-"with unverified emails will not be able to log in."
-msgstr ""
-"Si se debe requerir que el correo electrónico del usuario esté verificado en Logto. Si está activado, "
-"los usuarios con correos electrónicos no verificados no podrán iniciar sesión."
+msgid "Whether to require user email to be verified at Logto. If enabled, users with unverified emails will not be able to log in."
+msgstr "Si se debe requerir que el correo electrónico del usuario esté verificado en Logto. Si está activado, los usuarios con correos electrónicos no verificados no podrán iniciar sesión."
 
-#: src/LogtoPluginAdminDashboard.php:165
+#: src/LogtoPluginAdminDashboard.php:177
 msgctxt "Require organization ID description"
 msgid "When set, users must belong to the specified organization to log in."
 msgstr "Cuando está configurado, los usuarios deben pertenecer a la organización especificada para iniciar sesión."
 
-#: src/LogtoPluginAdminDashboard.php:173
+#: src/LogtoPluginAdminDashboard.php:185
 msgid "Authorization settings"
 msgstr "Configuración de autorización"
 
-#: src/LogtoPluginAdminDashboard.php:174
+#: src/LogtoPluginAdminDashboard.php:186
 msgctxt "Authorization settings description"
-msgid ""
-"Settings related to user authorization. These settings may affect the user "
-"experience and access control."
-msgstr ""
-"Configuración relacionada con la autorización de usuarios. Estos ajustes pueden afectar "
-"la experiencia del usuario y el control de acceso."
+msgid "Settings related to user authorization. These settings may affect the user experience and access control."
+msgstr "Configuración relacionada con la autorización de usuarios. Estos ajustes pueden afectar la experiencia del usuario y el control de acceso."
 
-#: src/LogtoPluginAdminDashboard.php:181
+#: src/LogtoPluginAdminDashboard.php:193
 msgctxt "Role mapping description"
-msgid ""
-"Map Logto roles to WordPress roles with order of precedence.<br/>When a role "
-"is found in the mapping, the user will be assigned the corresponding "
-"WordPress role and the rest of the mapping will be ignored."
-msgstr ""
-"Asigna roles de Logto a roles de WordPress con un orden de precedencia.<br/>Cuando "
-"se encuentra un rol en la asignación, se asignará al usuario el rol correspondiente en "
-"WordPress y se ignorará el resto de la asignación."
+msgid "Map Logto roles to WordPress roles with order of precedence (case-sensitive).<br/>When a role is found in the mapping, the user will be assigned the corresponding WordPress role and the rest of the mapping will be ignored."
+msgstr "Mapea roles de Logto a roles de WordPress con un orden de precedencia (sensible a mayúsculas y minúsculas).<br/>Cuando se encuentra un rol en la asignación, se asignará al usuario el rol correspondiente en WordPress y se ignorará el resto de la asignación."
 
-#: src/LogtoPluginAdminDashboard.php:184
+#: src/LogtoPluginAdminDashboard.php:196
 msgid "Logto role"
 msgstr "Rol de Logto"
 
-#: src/LogtoPluginAdminDashboard.php:185
+#: src/LogtoPluginAdminDashboard.php:197
 msgid "WordPress role"
 msgstr "Rol de WordPress"
 
-#: src/LogtoPluginAdminDashboard.php:193
+#: src/LogtoPluginAdminDashboard.php:205
 msgid "Advanced settings"
 msgstr "Configuración avanzada"
 
-#: src/LogtoPluginAdminDashboard.php:200
+#: src/LogtoPluginAdminDashboard.php:212
 msgctxt "Remember session description"
 msgid "Remember user session for a longer period"
 msgstr "Recordar la sesión del usuario por un período más largo"
 
-#: src/LogtoPluginAdminDashboard.php:201
+#: src/LogtoPluginAdminDashboard.php:213
 msgctxt "Remember session explanation"
-msgid ""
-"By default, WordPress session expires after 2 days. Enable this setting to "
-"remember user session for a longer period (14 days)."
-msgstr ""
-"Por defecto, la sesión de WordPress expira después de 2 días. Activa esta configuración "
-"para recordar la sesión del usuario por un período más largo (14 días)."
+msgid "By default, WordPress session expires after 2 days. Enable this setting to remember user session for a longer period (14 days)."
+msgstr "Por defecto, la sesión de WordPress expira después de 2 días. Activa esta configuración para recordar la sesión del usuario por un período más largo (14 días)."
 
-#: src/LogtoPluginAdminDashboard.php:207
+#: src/LogtoPluginAdminDashboard.php:219
 msgctxt "Sync profile description"
 msgid "Sync user profile at every login"
 msgstr "Sincronizar el perfil del usuario en cada inicio de sesión"
 
-#: src/LogtoPluginAdminDashboard.php:208
+#: src/LogtoPluginAdminDashboard.php:220
 msgctxt "Sync profile explanation"
-msgid ""
-"When enabled, user profile will be synced from Logto at every login and "
-"existing WordPress profile will be overwritten."
-msgstr ""
-"Cuando está activado, el perfil del usuario se sincronizará desde Logto en cada inicio de sesión "
-"y el perfil existente en WordPress será sobrescrito."
+msgid "When enabled, user profile will be synced from Logto at every login and existing WordPress profile will be overwritten (including role mapping)."
+msgstr "Cuando está activado, el perfil del usuario se sincronizará desde Logto en cada inicio de sesión y el perfil existente en WordPress será sobrescrito (incluida la asignación de roles)."
 
-#: src/LogtoPluginAdminDashboard.php:214
+#: src/LogtoPluginAdminDashboard.php:226
 msgctxt "WordPress form login description"
-msgid ""
-"Choose how to handle WordPress form login. You can disable WordPress form "
-"login to secure your site with Logto, or allow users to log in with "
-"WordPress form by appending a query parameter to the login URL."
-msgstr ""
-"Elige cómo manejar el inicio de sesión con el formulario de WordPress. Puedes deshabilitar "
-"el inicio de sesión con el formulario de WordPress para asegurar tu sitio con Logto, o permitir "
-"a los usuarios iniciar sesión con el formulario de WordPress agregando un parámetro de consulta a la URL de inicio de sesión."
+msgid "Choose how to handle WordPress form login. You can disable WordPress form login to secure your site with Logto, or allow users to log in with WordPress form by appending a query parameter to the login URL."
+msgstr "Elige cómo manejar el inicio de sesión con el formulario de WordPress. Puedes deshabilitar el inicio de sesión con el formulario de WordPress para asegurar tu sitio con Logto, o permitir a los usuarios iniciar sesión con el formulario de WordPress agregando un parámetro de consulta a la URL de inicio de sesión."
 
-#: src/LogtoPluginAdminDashboard.php:217
+#: src/LogtoPluginAdminDashboard.php:229
 msgid "Disabled"
 msgstr "Deshabilitado"
 
-#: src/LogtoPluginAdminDashboard.php:218
+#: src/LogtoPluginAdminDashboard.php:230
 msgctxt "WordPress form login query option"
 msgid "Query (append <code>?form=1</code> to use WordPress form login)"
 msgstr "Consulta (agrega <code>?form=1</code> para usar el formulario de inicio de sesión de WordPress)"
 
-#: src/LogtoPluginAdminDashboard.php:224
+#: src/LogtoPluginAdminDashboard.php:236
 msgctxt "Username strategy description"
-msgid ""
-"Choose how to determine the WordPress username when a user logs in with "
-"Logto."
-msgstr ""
-"Elige cómo determinar el nombre de usuario de WordPress cuando un usuario inicia sesión con Logto."
+msgid "Choose how to determine the WordPress username when a user logs in with Logto."
+msgstr "Elige cómo determinar el nombre de usuario de WordPress cuando un usuario inicia sesión con Logto."
 
-#: src/LogtoPluginAdminDashboard.php:227
+#: src/LogtoPluginAdminDashboard.php:239
 msgctxt "Smart username strategy"
-msgid ""
-"<b>Smart:</b> Use Logto email if available, otherwise use Logto username"
-msgstr ""
-"<b>Inteligente:</b> Usar el correo electrónico de Logto si está disponible, de lo contrario, usar el nombre de usuario de Logto"
+msgid "<b>Smart:</b> Use Logto email if available, otherwise use Logto username"
+msgstr "<b>Inteligente:</b> Usar el correo electrónico de Logto si está disponible, de lo contrario, usar el nombre de usuario de Logto"
 
-#: src/LogtoPluginAdminDashboard.php:228
+#: src/LogtoPluginAdminDashboard.php:240
 msgctxt "Email username strategy"
 msgid "<b>Email:</b> Use Logto email"
 msgstr "<b>Correo electrónico:</b> Usar el correo electrónico de Logto"
 
-#: src/LogtoPluginAdminDashboard.php:229
+#: src/LogtoPluginAdminDashboard.php:241
 msgctxt "Username username strategy"
 msgid "<b>Username:</b> Use Logto username"
 msgstr "<b>Nombre de usuario:</b> Usar el nombre de usuario de Logto"
 
-#: src/LogtoPluginAdminDashboard.php:248
+#. translators: %s is the field name that is missing.
+#: src/LogtoPluginAdminDashboard.php:261
 msgid "Field \"%s\" is required."
 msgstr "El campo \"%s\" es obligatorio."
 
-#: src/LogtoPluginAdminDashboard.php:271
+#: src/LogtoPluginAdminDashboard.php:284
 msgid "Settings updated."
 msgstr "Configuración actualizada."
 
-#: src/settings/SettingsSection.php:150
+#: src/settings/SettingsSection.php:175
 msgid "Add"
 msgstr "Añadir"
 
-#: src/settings/SettingsSection.php:179
+#: src/settings/SettingsSection.php:204
 msgid "Remove"
 msgstr "Eliminar"

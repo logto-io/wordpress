@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-01-31T06:10:32+00:00\n"
+"POT-Creation-Date: 2025-02-04T19:48:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: logto\n"
@@ -34,52 +34,111 @@ msgstr ""
 msgid "https://logto.io/"
 msgstr ""
 
-#: src/LogtoConstants.php:25
+#: src/LogtoConstants.php:26
 msgid "Logto endpoint"
 msgstr ""
 
-#: src/LogtoConstants.php:27
+#: src/LogtoConstants.php:28
 msgid "App ID"
 msgstr ""
 
-#: src/LogtoConstants.php:29
+#: src/LogtoConstants.php:30
 msgid "App secret"
 msgstr ""
 
-#: src/LogtoConstants.php:31
+#: src/LogtoConstants.php:32
+msgid "Redirect URI"
+msgstr ""
+
+#: src/LogtoConstants.php:34
+msgid "Post sign-out redirect URI"
+msgstr ""
+
+#: src/LogtoConstants.php:36
 msgid "Scope"
 msgstr ""
 
-#: src/LogtoConstants.php:33
+#: src/LogtoConstants.php:38
 msgid "Extra params"
 msgstr ""
 
-#: src/LogtoConstants.php:35
+#: src/LogtoConstants.php:40
 msgid "Require verified email"
 msgstr ""
 
-#: src/LogtoConstants.php:37
+#: src/LogtoConstants.php:42
 msgid "Require organization ID"
 msgstr ""
 
-#: src/LogtoConstants.php:39
+#: src/LogtoConstants.php:44
 msgid "Role mapping"
 msgstr ""
 
-#: src/LogtoConstants.php:41
+#: src/LogtoConstants.php:46
 msgid "Remember session"
 msgstr ""
 
-#: src/LogtoConstants.php:43
+#: src/LogtoConstants.php:48
 msgid "Sync profile"
 msgstr ""
 
-#: src/LogtoConstants.php:45
+#: src/LogtoConstants.php:50
 msgid "WordPress form login"
 msgstr ""
 
-#: src/LogtoConstants.php:47
+#: src/LogtoConstants.php:52
 msgid "Username strategy"
+msgstr ""
+
+#: src/LogtoPlugin.php:107
+msgctxt "Error title"
+msgid "Failed to login"
+msgstr ""
+
+#: src/LogtoPlugin.php:124
+msgctxt "Error title when error is unknown"
+msgid "Unknown error"
+msgstr ""
+
+#: src/LogtoPlugin.php:125
+msgctxt "Default error description for login failure"
+msgid "Please try again later or contact the site administrator."
+msgstr ""
+
+#. translators: %s is the actual error title.
+#: src/LogtoPlugin.php:130
+msgctxt "Error title"
+msgid "Failed to login: %s"
+msgstr ""
+
+#: src/LogtoPlugin.php:156
+msgctxt "Error title"
+msgid "Email not found"
+msgstr ""
+
+#: src/LogtoPlugin.php:157
+msgctxt "Error content for email not found"
+msgid "Email is required to complete login. Please contact the site administrator."
+msgstr ""
+
+#: src/LogtoPlugin.php:163
+msgctxt "Error title"
+msgid "Email not verified"
+msgstr ""
+
+#: src/LogtoPlugin.php:164
+msgctxt "Error content for email not verified"
+msgid "Email should be verified to complete login. Please contact the site administrator."
+msgstr ""
+
+#: src/LogtoPlugin.php:173
+msgctxt "Error title"
+msgid "Unauthorized"
+msgstr ""
+
+#: src/LogtoPlugin.php:227
+msgctxt "Error title"
+msgid "Failed to create user"
 msgstr ""
 
 #: src/LogtoPluginAdminDashboard.php:26
@@ -122,128 +181,139 @@ msgctxt "App secret description"
 msgid "One of the app secrets that shows up in the Logto Console application details page."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:140
+#: src/LogtoPluginAdminDashboard.php:137
+msgctxt "Redirect URI description"
+msgid "The redirect URI you need to enter and save in the Logto Console application details page."
+msgstr ""
+
+#: src/LogtoPluginAdminDashboard.php:143
+msgctxt "Post sign-out redirect URI description"
+msgid "The post sign-out redirect URI you need to enter and save in the Logto Console application details page."
+msgstr ""
+
+#: src/LogtoPluginAdminDashboard.php:152
 msgctxt "Authentication settings description"
 msgid "Settings related to user authentication. These settings may affect the user experience."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:146
+#: src/LogtoPluginAdminDashboard.php:158
 msgctxt "Scope description"
 msgid "The scopes to use for the authentication request. Separate multiple scopes by spaces."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:152
+#: src/LogtoPluginAdminDashboard.php:164
 msgctxt "Extra params description"
 msgid "Extra authentication parameters to include in the authentication request. Use the URL query string format, e.g., <code>param1=value1&amp;param2=value2</code>."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:158
+#: src/LogtoPluginAdminDashboard.php:170
 msgctxt "Require verified email description"
 msgid "Require user email to be verified before logging in"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:159
+#: src/LogtoPluginAdminDashboard.php:171
 msgctxt "Require verified email explanation"
 msgid "Whether to require user email to be verified at Logto. If enabled, users with unverified emails will not be able to log in."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:165
+#: src/LogtoPluginAdminDashboard.php:177
 msgctxt "Require organization ID description"
 msgid "When set, users must belong to the specified organization to log in."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:173
+#: src/LogtoPluginAdminDashboard.php:185
 msgid "Authorization settings"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:174
+#: src/LogtoPluginAdminDashboard.php:186
 msgctxt "Authorization settings description"
 msgid "Settings related to user authorization. These settings may affect the user experience and access control."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:181
+#: src/LogtoPluginAdminDashboard.php:193
 msgctxt "Role mapping description"
-msgid "Map Logto roles to WordPress roles with order of precedence.<br/>When a role is found in the mapping, the user will be assigned the corresponding WordPress role and the rest of the mapping will be ignored."
+msgid "Map Logto roles to WordPress roles with order of precedence (case-sensitive).<br/>When a role is found in the mapping, the user will be assigned the corresponding WordPress role and the rest of the mapping will be ignored."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:184
+#: src/LogtoPluginAdminDashboard.php:196
 msgid "Logto role"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:185
+#: src/LogtoPluginAdminDashboard.php:197
 msgid "WordPress role"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:193
+#: src/LogtoPluginAdminDashboard.php:205
 msgid "Advanced settings"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:200
+#: src/LogtoPluginAdminDashboard.php:212
 msgctxt "Remember session description"
 msgid "Remember user session for a longer period"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:201
+#: src/LogtoPluginAdminDashboard.php:213
 msgctxt "Remember session explanation"
 msgid "By default, WordPress session expires after 2 days. Enable this setting to remember user session for a longer period (14 days)."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:207
+#: src/LogtoPluginAdminDashboard.php:219
 msgctxt "Sync profile description"
 msgid "Sync user profile at every login"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:208
+#: src/LogtoPluginAdminDashboard.php:220
 msgctxt "Sync profile explanation"
-msgid "When enabled, user profile will be synced from Logto at every login and existing WordPress profile will be overwritten."
+msgid "When enabled, user profile will be synced from Logto at every login and existing WordPress profile will be overwritten (including role mapping)."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:214
+#: src/LogtoPluginAdminDashboard.php:226
 msgctxt "WordPress form login description"
 msgid "Choose how to handle WordPress form login. You can disable WordPress form login to secure your site with Logto, or allow users to log in with WordPress form by appending a query parameter to the login URL."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:217
+#: src/LogtoPluginAdminDashboard.php:229
 msgid "Disabled"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:218
+#: src/LogtoPluginAdminDashboard.php:230
 msgctxt "WordPress form login query option"
 msgid "Query (append <code>?form=1</code> to use WordPress form login)"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:224
+#: src/LogtoPluginAdminDashboard.php:236
 msgctxt "Username strategy description"
 msgid "Choose how to determine the WordPress username when a user logs in with Logto."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:227
+#: src/LogtoPluginAdminDashboard.php:239
 msgctxt "Smart username strategy"
 msgid "<b>Smart:</b> Use Logto email if available, otherwise use Logto username"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:228
+#: src/LogtoPluginAdminDashboard.php:240
 msgctxt "Email username strategy"
 msgid "<b>Email:</b> Use Logto email"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:229
+#: src/LogtoPluginAdminDashboard.php:241
 msgctxt "Username username strategy"
 msgid "<b>Username:</b> Use Logto username"
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:248
+#. translators: %s is the field name that is missing.
+#: src/LogtoPluginAdminDashboard.php:261
 msgid "Field \"%s\" is required."
 msgstr ""
 
-#: src/LogtoPluginAdminDashboard.php:271
+#: src/LogtoPluginAdminDashboard.php:284
 msgid "Settings updated."
 msgstr ""
 
-#: src/settings/SettingsSection.php:150
+#: src/settings/SettingsSection.php:175
 msgid "Add"
 msgstr ""
 
-#: src/settings/SettingsSection.php:179
+#: src/settings/SettingsSection.php:204
 msgid "Remove"
 msgstr ""

@@ -131,6 +131,18 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       _x('One of the app secrets that shows up in the Logto Console application details page.', 'App secret description', 'logto'),
       $this->settings->appSecret
     );
+    $basicSettings->addReadonlyField(
+      'redirectUri',
+      getSettingsTitle('redirectUri'),
+      _x('The redirect URI you need to enter and save in the Logto Console application details page.', 'Redirect URI description', 'logto'),
+      $this->settings->getRedirectUri()
+    );
+    $basicSettings->addReadonlyField(
+      'postSignOutRedirectUri',
+      getSettingsTitle('postSignOutRedirectUri'),
+      _x('The post sign-out redirect URI you need to enter and save in the Logto Console application details page.', 'Post sign-out redirect URI description', 'logto'),
+      $this->settings->getPostSignOutRedirectUri()
+    );
 
     $authenticationSettings = new Settings\SettingsSection(
       LogtoConstants::MENU_SLUG,
@@ -178,7 +190,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     $authorizationSettings->addKeyValuePairsField(
       'roleMapping',
       getSettingsTitle('roleMapping'),
-      _x('Map Logto roles to WordPress roles with order of precedence.<br/>When a role is found in the mapping, the user will be assigned the corresponding WordPress role and the rest of the mapping will be ignored.', 'Role mapping description', 'logto'),
+      _x('Map Logto roles to WordPress roles with order of precedence (case-sensitive).<br/>When a role is found in the mapping, the user will be assigned the corresponding WordPress role and the rest of the mapping will be ignored.', 'Role mapping description', 'logto'),
       $this->settings->roleMapping,
       [
         'keyPlaceholder' => __('Logto role', 'logto'),
@@ -205,7 +217,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       'syncProfile',
       getSettingsTitle('syncProfile'),
       _x('Sync user profile at every login', 'Sync profile description', 'logto'),
-      _x('When enabled, user profile will be synced from Logto at every login and existing WordPress profile will be overwritten.', 'Sync profile explanation', 'logto'),
+      _x('When enabled, user profile will be synced from Logto at every login and existing WordPress profile will be overwritten (including role mapping).', 'Sync profile explanation', 'logto'),
       $this->settings->syncProfile
     );
     $advancedSettings->addRadioField(
@@ -245,6 +257,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
         add_settings_error(
           LogtoConstants::OPTION_NAME,
           'logto_settings_invalid',
+          /* translators: %s is the field name that is missing. */
           sprintf(__('Field "%s" is required.', 'logto'), getSettingsTitle($field)),
           'error'
         );

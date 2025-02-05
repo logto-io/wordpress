@@ -9,6 +9,7 @@ class LogtoConstants
   const PLUGIN_DIR = LOGTO_PLUGIN_DIR;
   const PLUGIN_URL = LOGTO_PLUGIN_URL;
   const LOGIN_CALLBACK_TAG = 'logto_login_callback';
+  const LOGIN_CALLBACK_PATH = 'login-callback';
   const USER_META_CLAIMS_KEY = 'logto_user_claims';
   const USER_META_LOGTO_ID_KEY = 'logto_user_id';
   const ASSETS_URL = self::PLUGIN_URL . '../assets/';
@@ -27,6 +28,10 @@ function getSettingsTitle(string $id): string
       return __('App ID', 'logto');
     case 'appSecret':
       return __('App secret', 'logto');
+    case 'redirectUri':
+      return __('Redirect URI', 'logto');
+    case 'postSignOutRedirectUri':
+      return __('Post sign-out redirect URI', 'logto');
     case 'scope':
       return __('Scope', 'logto');
     case 'extraParams':
