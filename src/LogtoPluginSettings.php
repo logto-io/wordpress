@@ -47,6 +47,8 @@ class LogtoPluginSettings extends JsonModel
     public bool $syncProfile = true,
     public string $wpFormLogin = WpFormLogin::query->value,
     public string $usernameStrategy = WpUsernameStrategy::smart->value,
+    // Ignored
+    ...$extra
   ) {
   }
 

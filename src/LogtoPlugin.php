@@ -3,6 +3,7 @@ namespace Logto\WpPlugin;
 
 use Logto\Sdk\LogtoClient;
 use Logto\Sdk\Constants\UserScope;
+use Logto\WpPlugin\Settings\SettingsSection;
 
 class LogtoPlugin
 {
@@ -138,12 +139,27 @@ class LogtoPlugin
   {
     $body = str_starts_with($content, '<') ? $content : "<p>$content</p>";
     wp_die(
-      "<h1>$title</h1><p>$body</p>" .
-      "<a href='" . wp_login_url() . "'>" . _x('Login again', 'logto') . '</a><br/>' .
-      "<a href='" . home_url() . "'>" . _x('Back to home', 'logto') . '</a>',
-      $title,
+      wp_kses(
+        sprintf(
+          '<h1>%s</h1><p>%s</p><a href="%s">%s</a><br/><a href="%s">%s</a>',
+          wp_kses($title, SettingsSection::allowedTextHtml),
+          wp_kses($body, SettingsSection::allowedTextHtml),
+          esc_url(wp_login_url()),
+          esc_html(_x('Login again', 'Error page', 'logto')),
+          esc_url(home_url()),
+          esc_html(_x('Back to home', 'Error page', 'logto'))
+        ),
+        [
+          'h1' => [],
+          'p' => [],
+          'a' => ['href' => true],
+          'br' => []
+        ]
+      ),
+      esc_html($title),
       ['response' => 400]
     );
+
   }
 
   protected function upsertUser(LogtoClient $client): \WP_User
@@ -171,7 +187,7 @@ class LogtoPlugin
     ) {
       $this->handleError(
         _x('Unauthorized', 'Error title', 'logto'),
-        _x('You must be in the specified organization to complete login. Please contact the site administrator.', 'logto')
+        _x('You must be in the specified organization to complete login. Please contact the site administrator.', 'Error page', 'logto')
       );
     }
 

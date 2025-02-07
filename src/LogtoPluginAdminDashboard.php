@@ -155,7 +155,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       LogtoConstants::MENU_SLUG,
       LogtoConstants::OPTION_NAME,
       'logto_authentication_settings',
-      __('Authentication settings'),
+      __('Authentication settings', 'logto'),
       _x('Settings related to user authentication. These settings may affect the user experience.', 'Authentication settings description', 'logto'),
     );
     $authenticationSettings->render();
@@ -291,7 +291,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       LogtoConstants::OPTION_NAME,
       'logto_settings_updated',
       __('Settings updated.', 'logto'),
-      'updated'
+      'success'
     );
 
     return $input;
