@@ -26,7 +26,9 @@ class LogtoPluginSettings extends JsonModel
         ...get_option(LogtoConstants::OPTION_KEY, [])
       );
     } catch (\Throwable $e) {
-      error_log('Failed to get Logto settings: ' . $e->getMessage());
+      if (WP_DEBUG === true) {
+        error_log('Failed to get Logto settings: ' . $e->getMessage());
+      }
       return new self();
     }
   }

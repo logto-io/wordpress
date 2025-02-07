@@ -25,10 +25,10 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     $slug = LogtoConstants::MENU_SLUG;
     $settings_page_title = __('Logto Settings', 'logto');
     $settings_menu_title = __('Settings', 'logto');
-    $settings_callback = [$this, 'renderMenu'];
+    $settings_callback = [$this, 'renderSettings'];
     $help_page_title = __('Logto Help', 'logto');
     $help_menu_title = __('Help', 'logto');
-    $help_callback = [$this, 'renderMenu'];
+    $help_callback = [$this, 'renderHelp'];
 
     add_menu_page(
       $settings_page_title,
@@ -65,9 +65,14 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     });
   }
 
-  public function renderMenu(): void
+  public function renderSettings(): void
   {
     include LogtoConstants::PLUGIN_DIR . 'pages/Settings.php';
+  }
+
+  public function renderHelp(): void
+  {
+    include LogtoConstants::PLUGIN_DIR . 'pages/Help.php';
   }
 
   public function initSettings(): void
@@ -102,8 +107,10 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
 
     add_action('admin_notices', [$this, 'renderSettingsErrors']);
 
-    error_log('Init settings');
-    error_log(print_r($this->settings, true));
+    if (WP_DEBUG === true) {
+      error_log('Init Logto settings:');
+      error_log(print_r($this->settings, true));
+    }
 
     $basicSettings = new Settings\SettingsSection(
       LogtoConstants::MENU_SLUG,
@@ -245,8 +252,10 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
 
   public function validateSettings(array $input): array|false
   {
-    error_log('Validating settings');
-    error_log(print_r($input, true));
+    if (WP_DEBUG === true) {
+      error_log('Validating Logto settings:');
+      error_log(print_r($input, true));
+    }
 
     $oldValue = get_option(LogtoConstants::OPTION_NAME, []);
 
