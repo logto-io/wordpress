@@ -25,10 +25,10 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     $slug = LogtoConstants::MENU_SLUG;
     $settings_page_title = __('Logto Settings', 'logto');
     $settings_menu_title = __('Settings', 'logto');
-    $settings_callback = [$this, 'renderMenu'];
+    $settings_callback = [$this, 'renderSettings'];
     $help_page_title = __('Logto Help', 'logto');
     $help_menu_title = __('Help', 'logto');
-    $help_callback = [$this, 'renderMenu'];
+    $help_callback = [$this, 'renderHelp'];
 
     add_menu_page(
       $settings_page_title,
@@ -65,13 +65,20 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     });
   }
 
-  public function renderMenu(): void
+  public function renderSettings(): void
   {
     include LogtoConstants::PLUGIN_DIR . 'pages/Settings.php';
   }
 
+  public function renderHelp(): void
+  {
+    include LogtoConstants::PLUGIN_DIR . 'pages/Help.php';
+  }
+
   public function initSettings(): void
   {
+    // Maybe false positive: https://github.com/WordPress/plugin-check/pull/854#issuecomment-2631500035
+    // phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
     register_setting(LogtoConstants::OPTION_GROUP, LogtoConstants::OPTION_NAME, [$this, 'validateSettings']);
 
     // Add plain css from string
@@ -102,8 +109,8 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
 
     add_action('admin_notices', [$this, 'renderSettingsErrors']);
 
-    error_log('Init settings');
-    error_log(print_r($this->settings, true));
+    write_log('Init Logto settings:');
+    write_log($this->settings);
 
     $basicSettings = new Settings\SettingsSection(
       LogtoConstants::MENU_SLUG,
@@ -148,7 +155,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       LogtoConstants::MENU_SLUG,
       LogtoConstants::OPTION_NAME,
       'logto_authentication_settings',
-      __('Authentication settings'),
+      __('Authentication settings', 'logto'),
       _x('Settings related to user authentication. These settings may affect the user experience.', 'Authentication settings description', 'logto'),
     );
     $authenticationSettings->render();
@@ -245,8 +252,8 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
 
   public function validateSettings(array $input): array|false
   {
-    error_log('Validating settings');
-    error_log(print_r($input, true));
+    write_log('Validating Logto settings:');
+    write_log($input);
 
     $oldValue = get_option(LogtoConstants::OPTION_NAME, []);
 
@@ -282,7 +289,7 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       LogtoConstants::OPTION_NAME,
       'logto_settings_updated',
       __('Settings updated.', 'logto'),
-      'updated'
+      'success'
     );
 
     return $input;

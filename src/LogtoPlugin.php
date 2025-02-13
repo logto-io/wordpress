@@ -3,6 +3,7 @@ namespace Logto\WpPlugin;
 
 use Logto\Sdk\LogtoClient;
 use Logto\Sdk\Constants\UserScope;
+use Logto\WpPlugin\Settings\SettingsSection;
 
 class LogtoPlugin
 {
@@ -69,8 +70,10 @@ class LogtoPlugin
 
     parse_str($config->extraParams, $extraParams);
 
-    // Overwrite first screen parameter if it's lost password form
+    // Not processing form, just applying params before redirect.
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     if (isset($_GET['action']) && $_GET['action'] === 'lostpassword') {
+      // Overwrite first screen parameter if it's lost password form
       $extraParams['first_screen'] = 'reset_password';
     }
 
@@ -93,6 +96,8 @@ class LogtoPlugin
       return;
     }
 
+    // Not processing form, `code` is from Logto
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     if (isset($_GET["code"])) {
       try {
         $client = $this->buildClient();
@@ -116,13 +121,23 @@ class LogtoPlugin
   protected function shouldShowWordPressLoginForm(): bool
   {
     $config = LogtoPluginSettings::get();
+
+    // Not processing form, only checking for the parameter
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     return $config->wpFormLogin === WpFormLogin::query->value && isset($_GET['form']) && $_GET['form'] === '1';
   }
 
   protected function handleCallbackError(): void
   {
-    $error = $_GET["error"] ?? _x('Unknown error', 'Error title when error is unknown', 'logto');
-    $errorDescription = $_GET["error_description"] ?? _x('Please try again later or contact the site administrator.', 'Default error description for login failure', 'logto');
+    // Not processing form, just extracting error
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended
+    $error = sanitize_text_field(wp_unslash(
+      $_GET["error"] ?? _x('Unknown error', 'Error title when error is unknown', 'logto')
+    ));
+    $errorDescription = sanitize_text_field(wp_unslash(
+      $_GET["error_description"] ?? _x('Please try again later or contact the site administrator.', 'Default error description for login failure', 'logto')
+    ));
+    // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
     $this->handleError(
       sprintf(
@@ -138,12 +153,27 @@ class LogtoPlugin
   {
     $body = str_starts_with($content, '<') ? $content : "<p>$content</p>";
     wp_die(
-      "<h1>$title</h1><p>$body</p>" .
-      "<a href='" . wp_login_url() . "'>" . _x('Login again', 'logto') . '</a><br/>' .
-      "<a href='" . home_url() . "'>" . _x('Back to home', 'logto') . '</a>',
-      $title,
+      wp_kses(
+        sprintf(
+          '<h1>%s</h1><p>%s</p><a href="%s">%s</a><br/><a href="%s">%s</a>',
+          wp_kses($title, SettingsSection::allowedTextHtml),
+          wp_kses($body, SettingsSection::allowedTextHtml),
+          esc_url(wp_login_url()),
+          esc_html(_x('Login again', 'Error page', 'logto')),
+          esc_url(home_url()),
+          esc_html(_x('Back to home', 'Error page', 'logto'))
+        ),
+        [
+          'h1' => [],
+          'p' => [],
+          'a' => ['href' => true],
+          'br' => []
+        ]
+      ),
+      esc_html($title),
       ['response' => 400]
     );
+
   }
 
   protected function upsertUser(LogtoClient $client): \WP_User
@@ -171,7 +201,7 @@ class LogtoPlugin
     ) {
       $this->handleError(
         _x('Unauthorized', 'Error title', 'logto'),
-        _x('You must be in the specified organization to complete login. Please contact the site administrator.', 'logto')
+        _x('You must be in the specified organization to complete login. Please contact the site administrator.', 'Error page', 'logto')
       );
     }
 
@@ -253,6 +283,9 @@ class LogtoPlugin
   {
     $pendingEmail = get_user_meta($user->ID, '_new_email', true);
 
+    // No need to check nonce, since this function only does the sanity check for the
+    // profile update form.
+    // phpcs:disable WordPress.Security.NonceVerification.Missing
     if ($pendingEmail) {
       $errors->add('email', 'Email cannot be updated.');
       delete_user_meta($user->ID, '_new_email');
@@ -260,8 +293,9 @@ class LogtoPlugin
       $errors->add('email', 'Email cannot be updated.');
     }
 
-    if ($update && isset($_POST['pass1']) && $_POST['pass1']) {
+    if ($update && isset($_POST['pass1']) && boolval($_POST['pass1'])) {
       $errors->add('password', 'Password cannot be updated.');
     }
+    // phpcs:enable WordPress.Security.NonceVerification.Missing
   }
 }
