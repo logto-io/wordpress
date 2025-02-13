@@ -2,7 +2,10 @@
     "autoload": {
         "psr-4": {
             "Logto\\WpPlugin\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helpers.php"
+        ]
     },
     "require": {
         "logto/sdk": "^0.3.0"

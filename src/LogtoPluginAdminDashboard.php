@@ -77,6 +77,8 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
 
   public function initSettings(): void
   {
+    // Maybe false positive: https://github.com/WordPress/plugin-check/pull/854#issuecomment-2631500035
+    // phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
     register_setting(LogtoConstants::OPTION_GROUP, LogtoConstants::OPTION_NAME, [$this, 'validateSettings']);
 
     // Add plain css from string
@@ -107,10 +109,8 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
 
     add_action('admin_notices', [$this, 'renderSettingsErrors']);
 
-    if (WP_DEBUG === true) {
-      error_log('Init Logto settings:');
-      error_log(print_r($this->settings, true));
-    }
+    write_log('Init Logto settings:');
+    write_log($this->settings);
 
     $basicSettings = new Settings\SettingsSection(
       LogtoConstants::MENU_SLUG,
@@ -252,10 +252,8 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
 
   public function validateSettings(array $input): array|false
   {
-    if (WP_DEBUG === true) {
-      error_log('Validating Logto settings:');
-      error_log(print_r($input, true));
-    }
+    write_log('Validating Logto settings:');
+    write_log($input);
 
     $oldValue = get_option(LogtoConstants::OPTION_NAME, []);
 
