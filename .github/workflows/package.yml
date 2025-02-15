@@ -4,11 +4,15 @@ on:
   push:
     branches:
       - master
+    tags:
+      - v*
   pull_request:
 
 jobs:
   package:
     runs-on: ubuntu-latest
+    env:
+      SUFFIX: ${{ github.ref_type == 'tag' && github.ref_name || github.head_ref || github.sha }}
 
     steps:
     - uses: actions/checkout@v4
@@ -28,12 +32,20 @@ jobs:
         cd ~
         zip -X -r logto-plugin.zip logto/ -x "*/node_modules/*" ".*" "*/.*" composer.* README.md renovate.json
         cd -
-        mv ~/logto-plugin.zip .
-
+        mv ~/logto-plugin.zip ./logto-plugin-${{ env.SUFFIX }}.zip
+      
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: logto-plugin
-        path: logto-plugin.zip
+        name: logto-plugin-${{ env.SUFFIX }}
+        path: logto-plugin-${{ env.SUFFIX }}.zip
         retention-days: 1
         if-no-files-found: error
+
+    - name: Create release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v2
+      with:
+        draft: true
+        append_body: true
+        files: logto-plugin-${{ env.SUFFIX }}.zip
