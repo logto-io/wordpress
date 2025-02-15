@@ -23,7 +23,12 @@ jobs:
     
     - name: Create artifact
       run: |
-        zip -X -r logto-plugin.zip . -x "*/node_modules/*" ".*" "*/.*" composer.* README.md renovate.json
+        mkdir ~/logto
+        cp -r . ~/logto
+        cd ~
+        zip -X -r logto-plugin.zip logto/ -x "*/node_modules/*" ".*" "*/.*" composer.* README.md renovate.json
+        cd -
+        mv ~/logto-plugin.zip .
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
