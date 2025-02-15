@@ -9,7 +9,7 @@
   </p>
   <p>
     <b>
-      <?php echo wp_kses(_x('If you are looking for a step-by-step guide to set up Logto, please refer to our <a href="https://docs.logto.io/quick-start/wordpress-plugin" target="_blank" rel="noopener">WordPress plugin quick start guide</a>.', 'help', 'logto'), SettingsSection::allowedTextHtml); ?>
+      <?php echo wp_kses(_x('If you are looking for a step-by-step guide to set up Logto, please refer to our <a href="https://docs.logto.io/quick-starts/wordpress-plugin" target="_blank" rel="noopener">WordPress plugin quick start guide</a>.', 'help', 'logto'), SettingsSection::allowedTextHtml); ?>
     </b>
   </p>
   <p>

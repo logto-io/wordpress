@@ -70,6 +70,6 @@ class LogtoPluginSettings extends JsonModel
 
   function getPostSignOutRedirectUri(): string
   {
-    return home_url();
+    return home_url('/');
   }
 }
