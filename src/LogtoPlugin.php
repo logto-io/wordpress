@@ -41,8 +41,7 @@ class LogtoPlugin
       add_rewrite_rule('^' . LogtoConstants::LOGIN_CALLBACK_PATH . '/?$', 'index.php?' . LogtoConstants::LOGIN_CALLBACK_TAG . '=1', 'top');
       add_rewrite_tag('%' . LogtoConstants::LOGIN_CALLBACK_TAG . '%', '([^&]+)');
     });
-    add_action('login_form', [$this, 'handleLoginForm']);
-    add_action('lostpassword_form', [$this, 'handleLoginForm']);
+    add_action('login_init', [$this, 'handleLoginForm']);
     add_action('wp_logout', [$this, 'handleLogout']);
     add_action('template_redirect', [$this, 'handleCallback']);
     add_action('user_profile_update_errors', [$this, 'handleProfileUpdateErrors'], 10, 3);
