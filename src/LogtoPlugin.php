@@ -85,7 +85,7 @@ class LogtoPlugin
 
   function handleLogout(): void
   {
-    wp_redirect($this->buildClient()->signOut(home_url()));
+    wp_redirect($this->buildClient()->signOut(home_url() . '/'));
     exit;
   }
 
@@ -119,11 +119,23 @@ class LogtoPlugin
 
   protected function shouldShowWordPressLoginForm(): bool
   {
+    $request_method = $_SERVER['REQUEST_METHOD'];
+
+    // If it's not a GET request, we should show the WordPress login form.
+    if ($request_method !== 'GET') {
+      return true;
+    }
+
+    // If it's for logout, we should let the other hooks handle it.
+    if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+      return true;
+    }
+
     $config = LogtoPluginSettings::get();
 
     // Not processing form, only checking for the parameter
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-    return $config->wpFormLogin === WpFormLogin::query->value && isset($_GET['form']) && $_GET['form'] === '1';
+    return $config->wpFormLogin === WpFormLogin::query->value && (isset($_GET['form']) && $_GET['form'] === '1' || $request_method !== 'GET');
   }
 
   protected function handleCallbackError(): void
@@ -286,14 +298,10 @@ class LogtoPlugin
     // profile update form.
     // phpcs:disable WordPress.Security.NonceVerification.Missing
     if ($pendingEmail) {
-      $errors->add('email', 'Email cannot be updated.');
+      $errors->add('email', 'Email cannot be updated. Please update your email in Logto.');
       delete_user_meta($user->ID, '_new_email');
     } else if ($update && isset($_POST['email']) && $_POST['email'] !== $user->user_email) {
-      $errors->add('email', 'Email cannot be updated.');
-    }
-
-    if ($update && isset($_POST['pass1']) && boolval($_POST['pass1'])) {
-      $errors->add('password', 'Password cannot be updated.');
+      $errors->add('email', 'Email cannot be updated. Please update your email in Logto.');
     }
     // phpcs:enable WordPress.Security.NonceVerification.Missing
   }
