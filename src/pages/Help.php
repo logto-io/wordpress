@@ -1,3 +1,5 @@
+<?php if (!defined('ABSPATH'))
+  exit; ?>
 <?php use Logto\WpPlugin\Settings\SettingsSection; ?>
 <div class="wrap" style="max-width: 800px;">
   <h1><?php echo esc_html(get_admin_page_title()); ?></h1>

@@ -56,12 +56,10 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
       "$slug-help",
       $help_callback
     );
-    add_action('admin_head', function () {
-      echo '<style>
-          #adminmenu .toplevel_page_logto .wp-menu-image img {
-            padding-top: 8px;
-          }
-      </style>';
+
+    add_action('admin_enqueue_scripts', function () {
+      wp_register_style('logto-admin-menu', LogtoConstants::ASSETS_URL . 'admin-menu.css');
+      wp_enqueue_style('logto-admin-menu');
     });
   }
 
@@ -80,33 +78,10 @@ class LogtoPluginAdminDashboard extends Classes\Singleton
     // Maybe false positive: https://github.com/WordPress/plugin-check/pull/854#issuecomment-2631500035
     // phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
     register_setting(LogtoConstants::OPTION_GROUP, LogtoConstants::OPTION_NAME, [$this, 'validateSettings']);
-
-    // Add plain css from string
-    add_action('admin_head', function () {
-      echo '<style>
-        #form-logto_options h2 {
-          font-size: 1.5em;
-          margin-block: 2em 1em;
-        }
-        #form-logto_options p.subtitle {
-          color: #74777a;
-          margin-block: -0.5em 1.5em;
-          padding-inline: 0;
-        }
-        #form-logto_options p.description {
-          color: #74777a;
-          margin-top: 8px;
-          max-width: 600px;
-        }
-        #form-logto_options .form-table th {
-          padding: 12px 0;
-        }
-        #form-logto_options .form-table .radio-group * + * {
-          margin-block-start: 0.5em;
-        }
-</style>';
+    add_action('admin_enqueue_scripts', function () {
+      wp_register_style('logto-admin-settings', LogtoConstants::ASSETS_URL . 'admin-settings.css');
+      wp_enqueue_style('logto-admin-settings');
     });
-
     add_action('admin_notices', [$this, 'renderSettingsErrors']);
 
     write_log('Init Logto settings:');

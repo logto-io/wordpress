@@ -1,0 +1,24 @@
+#form-logto_options h2 {
+  font-size: 1.5em;
+  margin-block: 2em 1em;
+}
+
+#form-logto_options p.subtitle {
+  color: #74777a;
+  margin-block: -0.5em 1.5em;
+  padding-inline: 0;
+}
+
+#form-logto_options p.description {
+  color: #74777a;
+  margin-top: 8px;
+  max-width: 600px;
+}
+
+#form-logto_options .form-table th {
+  padding: 12px 0;
+}
+
+#form-logto_options .form-table .radio-group * + * {
+  margin-block-start: 0.5em;
+}
