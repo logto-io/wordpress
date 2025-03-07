@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('ABSPATH'))
+  exit;
+
 /*
  * Plugin Name: Logto - User Authentication and Authorization
  * Description: Enable beautiful and secure user authentication, including passwordless, social login, single sign-on (SSO), multi-factor authentication (MFA). Generic OAuth2, OpenID Connect, SAML are also supported. Use role-based access control (RBAC) to manage user permissions.

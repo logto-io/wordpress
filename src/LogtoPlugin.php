@@ -119,14 +119,13 @@ class LogtoPlugin
 
   protected function shouldShowWordPressLoginForm(): bool
   {
-    $request_method = $_SERVER['REQUEST_METHOD'];
-
-    // If it's not a GET request, we should show the WordPress login form.
-    if ($request_method !== 'GET') {
+    // If it's not a GET request, we should keep the default behavior.
+    if (empty($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'GET') {
       return true;
     }
 
     // If it's for logout, we should let the other hooks handle it.
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- not handling form, just checking for the parameter
     if (isset($_GET['action']) && $_GET['action'] === 'logout') {
       return true;
     }
@@ -135,7 +134,7 @@ class LogtoPlugin
 
     // Not processing form, only checking for the parameter
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-    return $config->wpFormLogin === WpFormLogin::query->value && (isset($_GET['form']) && $_GET['form'] === '1' || $request_method !== 'GET');
+    return $config->wpFormLogin === WpFormLogin::query->value && isset($_GET['form']) && $_GET['form'] === '1';
   }
 
   protected function handleCallbackError(): void

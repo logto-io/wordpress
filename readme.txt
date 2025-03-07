@@ -1,8 +1,8 @@
 === Logto - User Authentication and Authorization ===
 Contributors: logto
 Tags: login,sso,saml,oauth,oidc
-Requires at least: 6.0.0
-Tested up to: 6.7.1
+Requires at least: 6.0
+Tested up to: 6.7
 Requires PHP: 8.1
 License: MPL-2.0
 Stable tag: 1.0.0

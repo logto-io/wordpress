@@ -11,7 +11,39 @@ class SettingsSection
     'a' => ['href' => true, 'target' => true, 'rel' => true],
   ];
 
+  const allowedInputHtml = [
+    'input' => [
+      'type' => true,
+      'id' => true,
+      'name' => true,
+      'value' => true,
+      'style' => true,
+      'readonly' => true,
+      'placeholder' => true,
+      'checked' => true,
+      'class' => true,
+      'disabled' => true,
+    ],
+    'label' => ['for' => true],
+  ];
+
+  const allowedButtonHtml = [
+    'button' => [
+      'id' => true,
+      'type' => true,
+      'class' => true,
+      'style' => true,
+      'onclick' => true,
+      'disabled' => true,
+    ],
+  ];
+
   protected $rendered = false;
+  /**
+   * The script ID for the dynamic script added to the page. All scripts are shared across all
+   * sections.
+   */
+  protected string $scriptId;
 
   public function __construct(
     public string $page,
@@ -20,6 +52,7 @@ class SettingsSection
     public string $title,
     public ?string $description,
   ) {
+    $this->scriptId = 'logto-admin-settings' . $this->id;
   }
 
   public function render(): void
@@ -37,6 +70,7 @@ class SettingsSection
       ) : null,
       $this->page,
     );
+
     $this->rendered = true;
   }
 
@@ -246,7 +280,10 @@ class SettingsSection
         ['div' => ['style' => true]]
       );
 
-      $this->renderKeyValuePair($id, esc_attr($key), esc_attr($val), $options);
+      echo wp_kses(
+        $this->getKeyValuePairString($id, esc_attr($key), esc_attr($val), $options),
+        array_merge(self::allowedInputHtml, self::allowedButtonHtml)
+      );
       echo wp_kses('</div>', ['div' => []]);
     }
 
@@ -264,47 +301,52 @@ class SettingsSection
       array_merge(self::allowedTextHtml, ['p' => ['class' => true]])
     );
 
-    ?>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const addBtn = document.getElementById('add-<?php echo esc_html($id) ?>');
-        const editDiv = document.getElementById('edit-<?php echo esc_html($id) ?>');
+    if (!wp_script_is($this->scriptId, 'registered')) {
+      wp_register_script($this->scriptId, '');
+      wp_enqueue_script($this->scriptId);
+    }
 
-            addBtn.addEventListener('click', function () {
-          const div = document.createElement('div');
-          div.innerHTML = `<?php $this->renderKeyValuePair($id, '', '', $options) ?>`;
+    wp_add_inline_script($this->scriptId, sprintf('
+      document.addEventListener("DOMContentLoaded", function () {
+        const addBtn = document.getElementById("add-%s");
+        const editDiv = document.getElementById("edit-%s");
+
+        addBtn.addEventListener("click", function () {
+          const div = document.createElement("div");
+          div.innerHTML = `%s`;
           editDiv.appendChild(div);
         });
 
-        editDiv.addEventListener('click', function (e) {
-          if (e.target.tagName === 'BUTTON') {
+        editDiv.addEventListener("click", function (e) {
+          if (e.target.tagName === "BUTTON") {
             e.target.parentElement.remove();
           }
         });
       });
-    </script>
-    <?php
+    ',
+      esc_js($id),
+      esc_js($id),
+      wp_kses($this->getKeyValuePairString($id, '', '', $options), array_merge(self::allowedInputHtml, self::allowedButtonHtml))
+    ));
   }
 
-  protected function renderKeyValuePair(string $id, string $key, string $val, array $options): void
+  protected function getKeyValuePairString(string $id, string $key, string $val, array $options): string
   {
-    printf(
-      '<input type="text" name="%1$s[%2$s][keys][]" value="%3$s" style="width: 150px;" placeholder="%4$s" />',
-      esc_attr($this->optionName),
-      esc_attr($id),
-      esc_attr($key),
-      esc_attr($options['keyPlaceholder'] ?? 'Key')
-    );
-    printf(
-      '<input type="text" name="%1$s[%2$s][values][]" value="%3$s" style="width: 150px;" placeholder="%4$s" />',
-      esc_attr($this->optionName),
-      esc_attr($id),
-      esc_attr($val),
-      esc_attr($options['valuePlaceholder'] ?? 'Value')
-    );
-    echo wp_kses(
-      sprintf('<button type="button" class="button">%s</button>', esc_html(__('Remove', 'logto'))),
-      ['button' => ['type' => true, 'class' => true]]
-    );
+    return
+      sprintf(
+        '<input type="text" name="%1$s[%2$s][keys][]" value="%3$s" style="width: 150px;" placeholder="%4$s" />',
+        esc_attr($this->optionName),
+        esc_attr($id),
+        esc_attr($key),
+        esc_attr($options['keyPlaceholder'] ?? 'Key')
+      ) .
+      sprintf(
+        '<input type="text" name="%1$s[%2$s][values][]" value="%3$s" style="width: 150px;" placeholder="%4$s" />',
+        esc_attr($this->optionName),
+        esc_attr($id),
+        esc_attr($val),
+        esc_attr($options['valuePlaceholder'] ?? 'Value')
+      ) .
+      sprintf('<button type="button" class="button">%s</button>', esc_html(__('Remove', 'logto')));
   }
 }
