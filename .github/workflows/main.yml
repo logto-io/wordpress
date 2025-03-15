@@ -1,0 +1,27 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.1
+
+    - name: Install dependencies
+      run: composer install --optimize-autoloader
+
+    # Technically we need to check vendors' compatibility as well, need to figure out a proper way to do it.
+    - name: Check PHP compatibility
+      run: |
+        vendor/bin/phpcs --standard=PHPCompatibility --runtime-set testVersion 8.1 src logto.php

@@ -9,5 +9,15 @@
     },
     "require": {
         "logto/sdk": "^0.3.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.11",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "phpcompatibility/php-compatibility": "^9.3"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
