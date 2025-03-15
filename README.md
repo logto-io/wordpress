@@ -12,6 +12,8 @@ This is the official WordPress plugin for [Logto](https://logto.io). It helps yo
 
 ## Get started
 
+The plugin is available in the [WordPress Plugin Directory](https://wordpress.org/plugins/logto/).
+
 A step-by-step guide to help you get started with this plugin can be found in our [docs](https://docs.logto.io/quick-starts/wordpress-plugin).
 
 ### Minimum configuration
