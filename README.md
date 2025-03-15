@@ -10,13 +10,9 @@
 
 This is the official WordPress plugin for [Logto](https://logto.io). It helps you integrate your WordPress site with Logto to enable a single sign-on (SSO) experience for your users.
 
-> [!Warning]
-> This plugin is currently under WordPress Plugin Directory review and not yet available on the WordPress Plugin Directory. You can still download the plugin from the [releases](https://github.com/logto-io/wordpress/releases) and install it manually.
-
 ## Get started
 
-> [!Note]
-> The guide is under review. Please refer to https://github.com/logto-io/docs/pull/999 for the latest information.
+The plugin is available in the [WordPress Plugin Directory](https://wordpress.org/plugins/logto/).
 
 A step-by-step guide to help you get started with this plugin can be found in our [docs](https://docs.logto.io/quick-starts/wordpress-plugin).
 
