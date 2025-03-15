@@ -10,7 +10,7 @@ Stable tag: 1.0.0
 Enable beautiful and secure user authentication, including passwordless, social login, single sign-on, multi-factor authentication (MFA), and more.
 
 == Description ==
-Thank you for choosing Logto! By integrating Logto into your WordPress site, you are not only enhancing the security and user experience of your site, but also enabling a unified login experience across all your applications.
+Thank you for choosing [Logto](https://logto.io/?ref=wpp)! By integrating Logto into your WordPress site, you are not only enhancing the security and user experience of your site, but also enabling a unified login experience across all your applications.
 
 ## Why Logto?
 

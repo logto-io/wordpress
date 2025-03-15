@@ -31,23 +31,58 @@ class LogtoPluginSettings extends JsonModel
     }
   }
 
+  // We have to define all properties here and assign them in the constructor because WordPress
+  // plugin directory's SVN pre-commit hook will reject the commit if we assign the enum values
+  // as default values on property promotion. The error message is:
+  //
+  // > Fatal error: Constant expression contains invalid operations in Standard input code on line 47
+  // > Errors parsing Standard input code
+  //
+  // Maybe we can bring back the enum default values when WordPress SVN switches to a newer PHP
+  // version.
+
+  public string $endpoint;
+  public string $appId;
+  public string $appSecret;
+  public string $scope;
+  public string $extraParams;
+  public bool $requireVerifiedEmail;
+  public string $requireOrganizationId;
+  public array $roleMapping;
+  public bool $rememberSession;
+  public bool $syncProfile;
+  public string $wpFormLogin;
+  public string $usernameStrategy;
+
   public function __construct(
-    public string $endpoint = '',
-    public string $appId = '',
-    public string $appSecret = '',
-    // Logto SDK includes default scopes, so no need to include them here
-    public string $scope = UserScope::email->value . ' ' . UserScope::roles->value,
-    public string $extraParams = '',
-    public bool $requireVerifiedEmail = true,
-    public string $requireOrganizationId = '',
-    public array $roleMapping = [],
-    public bool $rememberSession = true,
-    public bool $syncProfile = true,
-    public string $wpFormLogin = WpFormLogin::query->value,
-    public string $usernameStrategy = WpUsernameStrategy::smart->value,
+    string $endpoint = '',
+    string $appId = '',
+    string $appSecret = '',
+    ?string $scope = null,
+    string $extraParams = '',
+    bool $requireVerifiedEmail = true,
+    string $requireOrganizationId = '',
+    array $roleMapping = [],
+    bool $rememberSession = true,
+    bool $syncProfile = true,
+    ?string $wpFormLogin = null,
+    ?string $usernameStrategy = null,
     // Ignored
     ...$extra
   ) {
+    $this->endpoint = $endpoint;
+    $this->appId = $appId;
+    $this->appSecret = $appSecret;
+    // Logto SDK includes default scopes, so no need to include them here
+    $this->scope = $scope ?? UserScope::email->value . ' ' . UserScope::roles->value;
+    $this->extraParams = $extraParams;
+    $this->requireVerifiedEmail = $requireVerifiedEmail;
+    $this->requireOrganizationId = $requireOrganizationId;
+    $this->roleMapping = $roleMapping;
+    $this->rememberSession = $rememberSession;
+    $this->syncProfile = $syncProfile;
+    $this->wpFormLogin = $wpFormLogin ?? WpFormLogin::query->value;
+    $this->usernameStrategy = $usernameStrategy ?? WpUsernameStrategy::smart->value;
   }
 
   /**
