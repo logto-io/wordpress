@@ -30,7 +30,7 @@ jobs:
         mkdir ~/logto
         cp -r . ~/logto
         cd ~
-        zip -X -r logto-plugin.zip logto/ -x "*/node_modules/*" ".*" "*/.*" composer.* README.md renovate.json
+        zip -X -r logto-plugin.zip logto/ -x "*/node_modules/*" ".*" "*/.*" "composer.*" README.md renovate.json
         cd -
         mv ~/logto-plugin.zip ./logto-plugin-${{ env.SUFFIX }}.zip
       
