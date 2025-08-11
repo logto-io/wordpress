@@ -15,7 +15,7 @@ jobs:
       SUFFIX: ${{ github.ref_type == 'tag' && github.ref_name || github.head_ref || github.sha }}
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
